@@ -1,0 +1,23 @@
+"use client";
+
+import { useState } from "react";
+import { Package, Tag, Layers } from "lucide-react";
+import { InventoryItem } from "@/types";
+import { Badge } from "@/components/ui/Badge";
+import { GRADE_COLORS, STATUS_COLORS, STATUS_LABELS } from "@/lib/constants";
+import { createReservation } from "@/lib/db";
+import { useAuth } from "@/hooks/useAuth";
+
+interface InventoryCardProps {
+  item: InventoryItem;
+  onReserved?: () => void;
+}
+
+export default function InventoryCard({ item, onReserved }: InventoryCardProps) {
+  const { profile } = useAuth();
+  const [qty, setQty] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const canReserve = item.status === "available" &&
