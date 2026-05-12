@@ -45,21 +45,14 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
   };
 
   return (
-    <div
-      className={clsx(
-        "bg-surface-800 border rounded-xl p-5 flex flex-col gap-4 transition-all",
-        item.status === "sold"
-          ? "border-surface-600 opacity-60"
-          : "border-surface-600 hover:border-surface-500"
-      )}
-    >
+    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-4 shadow-card hover:shadow-md transition-all">
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h3 className="text-white font-semibold text-base leading-snug">
+          <h3 className="text-navy-500 font-semibold text-base leading-snug">
             {item.model}
           </h3>
-          <p className="text-surface-400 text-sm mt-0.5">
+          <p className="text-slate-400 text-sm mt-0.5">
             {item.storage} · {item.color}
           </p>
         </div>
@@ -72,25 +65,25 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
       {/* Meta row */}
       <div className="flex items-center gap-3 flex-wrap">
         <div className="flex items-center gap-1.5 text-sm">
-          <Layers size={13} className="text-surface-400" />
+          <Layers size={13} className="text-slate-400" />
           <Badge label={item.grade} className={GRADE_COLORS[item.grade]} />
         </div>
-        <div className="flex items-center gap-1.5 text-sm text-surface-400">
+        <div className="flex items-center gap-1.5 text-sm text-slate-400">
           <Package size={13} />
           <span>
-            <span className="text-white font-medium">{item.availableQty}</span>
+            <span className="text-navy-500 font-medium">{item.availableQty}</span>
             /{item.quantity} pcs
           </span>
         </div>
       </div>
 
       {/* Price */}
-      <div className="flex items-center justify-between bg-surface-700 rounded-lg px-4 py-3">
+      <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-4 py-3">
         <div className="flex items-center gap-1.5">
-          <Tag size={13} className="text-amber-400" />
-          <span className="text-surface-400 text-xs">Unit Price</span>
+          <Tag size={13} className="text-navy-500" />
+          <span className="text-slate-400 text-xs">Unit Price</span>
         </div>
-        <span className="text-amber-400 font-mono font-semibold text-lg">
+        <span className="text-navy-500 font-mono font-semibold text-lg">
           {item.buyerPrice.toLocaleString()} AED
         </span>
       </div>
@@ -98,41 +91,39 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
       {/* Reserve controls */}
       {canReserve && (
         <div className="flex items-center gap-2">
-          <div className="flex items-center border border-surface-500 rounded-lg overflow-hidden">
+          <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
             <button
               onClick={() => setQty((q) => Math.max(1, q - 1))}
-              className="px-3 py-2 text-surface-400 hover:text-white hover:bg-surface-600 transition-colors text-sm"
+              className="px-3 py-2 text-slate-400 hover:text-navy-500 hover:bg-slate-50 transition-colors text-sm"
             >
               −
             </button>
-            <span className="px-3 py-2 text-white text-sm font-mono min-w-[2.5rem] text-center">
+            <span className="px-3 py-2 text-navy-500 text-sm font-mono min-w-[2.5rem] text-center">
               {qty}
             </span>
             <button
               onClick={() => setQty((q) => Math.min(item.availableQty, q + 1))}
-              className="px-3 py-2 text-surface-400 hover:text-white hover:bg-surface-600 transition-colors text-sm"
+              className="px-3 py-2 text-slate-400 hover:text-navy-500 hover:bg-slate-50 transition-colors text-sm"
             >
               +
             </button>
           </div>
-          <Button
+          <button
             onClick={handleReserve}
-            loading={loading}
-            className="flex-1"
-            size="sm"
+            disabled={loading}
+            className="flex-1 bg-navy-500 hover:bg-navy-600 text-white font-medium rounded-lg py-2 text-sm transition-all disabled:opacity-50"
           >
-            {success ? "✓ Reserved!" : "Reserve"}
-          </Button>
+            {loading ? "..." : success ? "✓ Reserved!" : "Reserve"}
+          </button>
         </div>
       )}
 
-      {error && <p className="text-rose-400 text-xs">{error}</p>}
+      {error && <p className="text-rose-500 text-xs">{error}</p>}
 
-      {/* Total */}
       {canReserve && qty > 1 && (
-        <p className="text-surface-400 text-xs text-right">
+        <p className="text-slate-400 text-xs text-right">
           Total:{" "}
-          <span className="text-amber-400 font-mono font-medium">
+          <span className="text-navy-500 font-mono font-medium">
             {(item.buyerPrice * qty).toLocaleString()} AED
           </span>
         </p>

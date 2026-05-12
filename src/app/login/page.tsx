@@ -42,99 +42,79 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-900 flex items-center justify-center px-4">
-      {/* Background grid pattern */}
-      <div
-        className="fixed inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,197,66,0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,197,66,0.5) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
-
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm relative z-10">
         {/* Logo */}
         <div className="flex flex-col items-center mb-10">
-          <div className="w-14 h-14 bg-amber-400 rounded-2xl flex items-center justify-center mb-4 shadow-glow">
-            <Smartphone size={26} className="text-surface-900" />
+          <div className="w-14 h-14 bg-navy-500 rounded-2xl flex items-center justify-center mb-4 shadow-glow">
+            <Smartphone size={26} className="text-white" />
           </div>
-          <h1 className="text-white text-2xl font-semibold">PhoneVault</h1>
-          <p className="text-surface-400 text-sm mt-1">B2B Wholesale Platform</p>
+          <h1 className="text-navy-500 text-2xl font-semibold">PhoneVault</h1>
+          <p className="text-slate-400 text-sm mt-1">B2B Wholesale Platform</p>
         </div>
 
         {/* Card */}
-        <div className="bg-surface-800 border border-surface-600 rounded-2xl p-8 shadow-card">
-          <h2 className="text-white font-semibold text-lg mb-1">Sign In</h2>
-          <p className="text-surface-400 text-sm mb-6">
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-card">
+          <h2 className="text-navy-500 font-semibold text-lg mb-1">Sign In</h2>
+          <p className="text-slate-400 text-sm mb-6">
             Authorized accounts only
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
             <div>
-              <label className="block text-surface-300 text-xs font-medium mb-1.5 uppercase tracking-wider">
+              <label className="block text-slate-500 text-xs font-medium mb-1.5 uppercase tracking-wider">
                 Email
               </label>
               <div className="relative">
-                <Mail
-                  size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400"
-                />
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="email"
                   autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-surface-700 border border-surface-500 text-white placeholder-surface-500 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-amber-400/60 transition-colors"
+                  className="w-full bg-slate-50 border border-slate-200 text-navy-500 placeholder-slate-400 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-navy-500 transition-colors"
                   placeholder="you@company.com"
                 />
               </div>
             </div>
 
-            {/* Password */}
             <div>
-              <label className="block text-surface-300 text-xs font-medium mb-1.5 uppercase tracking-wider">
+              <label className="block text-slate-500 text-xs font-medium mb-1.5 uppercase tracking-wider">
                 Password
               </label>
               <div className="relative">
-                <Lock
-                  size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400"
-                />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="password"
                   autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-surface-700 border border-surface-500 text-white placeholder-surface-500 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-amber-400/60 transition-colors"
+                  className="w-full bg-slate-50 border border-slate-200 text-navy-500 placeholder-slate-400 rounded-lg pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:border-navy-500 transition-colors"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
-            {/* Error */}
             {error && (
-              <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 rounded-lg px-3 py-2.5">
-                <AlertCircle size={14} className="text-rose-400 shrink-0" />
-                <p className="text-rose-400 text-sm">{error}</p>
+              <div className="flex items-center gap-2 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2.5">
+                <AlertCircle size={14} className="text-rose-500 shrink-0" />
+                <p className="text-rose-500 text-sm">{error}</p>
               </div>
             )}
 
-            <Button
+            <button
               type="submit"
-              loading={submitting}
-              size="lg"
-              className="w-full mt-2"
+              disabled={submitting}
+              className="w-full bg-navy-500 hover:bg-navy-600 text-white font-medium rounded-lg py-3 text-sm transition-all disabled:opacity-50 mt-2"
             >
-              Sign In
-            </Button>
+              {submitting ? "Signing in..." : "Sign In"}
+            </button>
           </form>
         </div>
 
-        <p className="text-center text-surface-500 text-xs mt-6">
+        <p className="text-center text-slate-400 text-xs mt-6">
           Access restricted to approved wholesale partners
         </p>
       </div>

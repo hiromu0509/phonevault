@@ -32,16 +32,16 @@ export default function Sidebar() {
   const nav = isAdmin ? adminNav : buyerNav;
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-60 bg-surface-800 border-r border-surface-600 flex flex-col z-30">
+    <aside className="fixed left-0 top-0 h-full w-60 bg-white border-r border-slate-200 flex flex-col z-30 shadow-sm">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-surface-600">
+      <div className="px-5 py-5 border-b border-slate-200">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-amber-400 rounded-lg flex items-center justify-center">
-            <Smartphone size={16} className="text-surface-900" />
+          <div className="w-8 h-8 bg-navy-500 rounded-lg flex items-center justify-center">
+            <Smartphone size={16} className="text-white" />
           </div>
           <div>
-            <p className="text-white font-semibold text-sm leading-none">PhoneVault</p>
-            <p className="text-surface-400 text-[10px] mt-0.5 uppercase tracking-widest">
+            <p className="text-navy-500 font-semibold text-sm leading-none">PhoneVault</p>
+            <p className="text-slate-400 text-[10px] mt-0.5 uppercase tracking-widest">
               Wholesale
             </p>
           </div>
@@ -59,31 +59,31 @@ export default function Sidebar() {
               className={clsx(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group",
                 active
-                  ? "bg-amber-400/15 text-amber-400"
-                  : "text-surface-400 hover:text-white hover:bg-surface-700"
+                  ? "bg-navy-500 text-white"
+                  : "text-slate-500 hover:text-navy-500 hover:bg-slate-100"
               )}
             >
               <Icon size={16} />
               <span className="flex-1">{label}</span>
-              {active && <ChevronRight size={12} className="text-amber-400" />}
+              {active && <ChevronRight size={12} className="text-white" />}
             </Link>
           );
         })}
       </nav>
 
       {/* User footer */}
-      <div className="px-3 py-4 border-t border-surface-600 space-y-1">
+      <div className="px-3 py-4 border-t border-slate-200 space-y-1">
         <div className="px-3 py-2">
-          <p className="text-white text-sm font-medium truncate">
+          <p className="text-navy-500 text-sm font-medium truncate">
             {profile?.displayName}
           </p>
-          <p className="text-surface-400 text-xs truncate">{profile?.email}</p>
+          <p className="text-slate-400 text-xs truncate">{profile?.email}</p>
           <span
             className={clsx(
               "inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider border",
               isAdmin
-                ? "text-amber-400 border-amber-400/30 bg-amber-400/10"
-                : "text-sky-400 border-sky-400/30 bg-sky-400/10"
+                ? "text-navy-500 border-navy-500 bg-navy-500/10"
+                : "text-sky-500 border-sky-500 bg-sky-500/10"
             )}
           >
             {profile?.role}
@@ -91,7 +91,7 @@ export default function Sidebar() {
         </div>
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-surface-400 hover:text-rose-400 hover:bg-rose-400/10 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all"
         >
           <LogOut size={16} />
           Sign out

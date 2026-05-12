@@ -11,22 +11,27 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  body {
+    background-color: #F8F9FC;
+    color: #1E3A8A;
+  }
+
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #10121A;
+    background: #F1F3F8;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #2E3650;
+    background: #CBD5E1;
     border-radius: 2px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #3a4462;
+    background: #94A3B8;
   }
 }
 
