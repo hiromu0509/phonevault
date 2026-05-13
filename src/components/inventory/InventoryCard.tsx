@@ -48,9 +48,12 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
     <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {item.flag && (
-              <span className="text-xl">{item.flag}</span>
+              <span className="text-lg">{item.flag}</span>
+            )}
+            {item.country && !item.flag && (
+              <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{item.country}</span>
             )}
             <h3 className="text-navy-500 font-semibold text-base">{item.model}</h3>
           </div>
