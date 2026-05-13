@@ -27,13 +27,14 @@ const COLOR_KEYWORDS = [
   "Purple", "Yellow", "Pink", "Titanium", "Graphite", "Midnight",
   "Starlight", "Deep Purple", "Sierra Blue", "Alpine Green",
   "Space Gray", "Space Grey", "Natural", "Desert", "Coral",
+  "Orange", "Orenge", "Violet", "Teal", "Lavender", "Cream",
+  "Beige", "Rose", "Burgundy", "Navy",
 ];
 
-// ─── 国旗マッピング ───────────────────────────────────────────────────────────
+// ─── 国マッピング ─────────────────────────────────────────────────────────────
 const COUNTRY_MAP: { pattern: RegExp; flag: string; country: string }[] = [
   { pattern: /\bjapan\b/i, flag: "🇯🇵", country: "Japan" },
-  { pattern: /\bjaponese\b/i, flag: "🇯🇵", country: "Japan" },
-  { pattern: /\bus\b|\busa\b|\bamerica\b|\bamerican\b/i, flag: "🇺🇸", country: "US" },
+  { pattern: /\bus\b|\busa\b|\bamerica\b/i, flag: "🇺🇸", country: "USA" },
   { pattern: /\buk\b|\bbritain\b|\bengland\b/i, flag: "🇬🇧", country: "UK" },
 ];
 
@@ -57,18 +58,27 @@ function parseBlock(block: string): ParsedInventoryItem | null {
 
   const modelLine = lines[0];
 
+  // ── Storage: モデル名の数字(256等)もGBとして認識 ──
   let storage = "128GB";
   const storageMatch = block.match(STORAGE_PATTERN);
-  if (storageMatch) storage = `${storageMatch[1]}GB`;
+  if (storageMatch) {
+    storage = `${storageMatch[1]}GB`;
+  } else {
+    // GBなしで数字だけの場合（例: 256）
+    const numMatch = modelLine.match(/\b(64|128|256|512|1024)\b/);
+    if (numMatch) storage = `${numMatch[1]}GB`;
+  }
 
+  // ── Color ──
   let color = "Unknown";
   for (const c of COLOR_KEYWORDS) {
     if (new RegExp(`\\b${c}\\b`, "i").test(block)) {
-      color = c;
+      color = c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
       break;
     }
   }
 
+  // ── Grade ──
   let grade: PhoneGrade = "A";
   for (const { pattern, grade: g } of GRADE_PATTERNS) {
     if (pattern.test(block)) {
@@ -77,6 +87,7 @@ function parseBlock(block: string): ParsedInventoryItem | null {
     }
   }
 
+  // ── Price ──
   let sellerPrice = 0;
   for (const line of lines) {
     if (/aed|price/i.test(line)) {
@@ -97,6 +108,7 @@ function parseBlock(block: string): ParsedInventoryItem | null {
     }
   }
 
+  // ── Quantity ──
   let quantity = 1;
   for (const pattern of QTY_PATTERNS) {
     const m = block.match(pattern);
@@ -105,12 +117,14 @@ function parseBlock(block: string): ParsedInventoryItem | null {
 
   if (!sellerPrice) return null;
 
-  // 国旗検出
+  // ── 国検出 ──
   const countryInfo = detectCountry(block);
 
+  // ── モデル名クリーンアップ ──
   const model = modelLine
     .replace(STORAGE_PATTERN, "")
-    .replace(new RegExp(COLOR_KEYWORDS.join("|"), "gi"), "")
+    .replace(/\b(64|128|256|512|1024)\b/, "")
+    .replace(new RegExp(`\\b(${COLOR_KEYWORDS.join("|")})\\b`, "gi"), "")
     .replace(/\s+/g, " ")
     .trim();
 
@@ -167,19 +181,19 @@ export function parsedItemToFirestore(
   };
 }
 
-export const SAMPLE_WHATSAPP_INPUT = `iPhone 14 Pro 256 Purple
+export const SAMPLE_WHATSAPP_INPUT = `iPhone 17 Pro 256 Orange
 Japan
+A Grade
+7070 AED
+50 pcs
+
+iPhone 14 Pro 256 Purple
+USA
 A Grade
 2450 AED
 5 pcs
 
-iPhone 13 128GB Black
-US
-A- Grade
-1650 AED
-10 pcs
-
-Samsung S24 Ultra 512GB Titanium Black
+Samsung S24 Ultra 512GB Black
 UK
 A+ Grade
 3200 AED
