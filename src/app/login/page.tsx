@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Smartphone, Lock, Mail, AlertCircle } from "lucide-react";
+import { Lock, Mail, AlertCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/Button";
 
 export default function LoginPage() {
   const { login, user, loading } = useAuth();
@@ -47,9 +46,17 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex flex-col items-center mb-10">
           <div className="w-14 h-14 bg-navy-500 rounded-2xl flex items-center justify-center mb-4 shadow-glow">
-            <Smartphone size={26} className="text-white" />
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <rect x="7" y="8" width="10" height="13" rx="1.5" fill="white"/>
+              <rect x="9" y="10" width="6" height="7" rx="0.5" fill="#1E3A8A"/>
+              <circle cx="12" cy="19" r="0.8" fill="#1E3A8A"/>
+              <path d="M5 8L7 5L9 7L12 3L15 7L17 5L19 8H5Z" fill="#FFD700"/>
+              <circle cx="7" cy="5" r="1" fill="#FFD700"/>
+              <circle cx="12" cy="3" r="1" fill="#FFD700"/>
+              <circle cx="17" cy="5" r="1" fill="#FFD700"/>
+            </svg>
           </div>
-          <h1 className="text-navy-500 text-2xl font-semibold">PhoneVault</h1>
+          <h1 className="text-navy-500 text-2xl font-semibold">Best of Best</h1>
           <p className="text-slate-400 text-sm mt-1">B2B Wholesale Platform</p>
         </div>
 
