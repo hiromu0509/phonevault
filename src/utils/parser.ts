@@ -1,8 +1,6 @@
 import { ParsedInventoryItem, ParseResult, PhoneGrade } from "@/types";
 import { COMMISSION_AED } from "@/lib/constants";
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
 const GRADE_PATTERNS: { pattern: RegExp; grade: PhoneGrade }[] = [
   { pattern: /\bA\+\s*grade\b/i, grade: "A+" },
   { pattern: /\bA-\s*grade\b/i, grade: "A-" },
@@ -31,10 +29,21 @@ const COLOR_KEYWORDS = [
   "Space Gray", "Space Grey", "Natural", "Desert", "Coral",
 ];
 
-/**
- * Split raw WhatsApp text into blocks.
- * Blocks are separated by blank lines.
- */
+// ─── 国旗マッピング ───────────────────────────────────────────────────────────
+const COUNTRY_MAP: { pattern: RegExp; flag: string; country: string }[] = [
+  { pattern: /\bjapan\b/i, flag: "🇯🇵", country: "Japan" },
+  { pattern: /\bjaponese\b/i, flag: "🇯🇵", country: "Japan" },
+  { pattern: /\bus\b|\busa\b|\bamerica\b|\bamerican\b/i, flag: "🇺🇸", country: "US" },
+  { pattern: /\buk\b|\bbritain\b|\bengland\b/i, flag: "🇬🇧", country: "UK" },
+];
+
+function detectCountry(block: string): { flag: string; country: string } | null {
+  for (const { pattern, flag, country } of COUNTRY_MAP) {
+    if (pattern.test(block)) return { flag, country };
+  }
+  return null;
+}
+
 function splitIntoBlocks(raw: string): string[] {
   return raw
     .split(/\n{2,}/)
@@ -42,23 +51,16 @@ function splitIntoBlocks(raw: string): string[] {
     .filter((b) => b.length > 0);
 }
 
-/**
- * Parse a single text block into an inventory item.
- * Returns null if the block can't be parsed.
- */
 function parseBlock(block: string): ParsedInventoryItem | null {
   const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
   if (lines.length < 2) return null;
 
-  // ── Model (first line) ──
   const modelLine = lines[0];
 
-  // ── Storage ──
   let storage = "128GB";
   const storageMatch = block.match(STORAGE_PATTERN);
   if (storageMatch) storage = `${storageMatch[1]}GB`;
 
-  // ── Color ──
   let color = "Unknown";
   for (const c of COLOR_KEYWORDS) {
     if (new RegExp(`\\b${c}\\b`, "i").test(block)) {
@@ -67,7 +69,6 @@ function parseBlock(block: string): ParsedInventoryItem | null {
     }
   }
 
-  // ── Grade ──
   let grade: PhoneGrade = "A";
   for (const { pattern, grade: g } of GRADE_PATTERNS) {
     if (pattern.test(block)) {
@@ -76,7 +77,6 @@ function parseBlock(block: string): ParsedInventoryItem | null {
     }
   }
 
-  // ── Price ── (look for lines that contain AED or standalone numbers 3-6 digits)
   let sellerPrice = 0;
   for (const line of lines) {
     if (/aed|price/i.test(line)) {
@@ -84,7 +84,6 @@ function parseBlock(block: string): ParsedInventoryItem | null {
       if (m) { sellerPrice = parseInt(m[1], 10); break; }
     }
   }
-  // Fallback: scan all lines for a plausible price
   if (!sellerPrice) {
     for (const line of lines) {
       const m = line.match(/\b(\d{3,6})\b/);
@@ -98,16 +97,17 @@ function parseBlock(block: string): ParsedInventoryItem | null {
     }
   }
 
-  // ── Quantity ──
   let quantity = 1;
   for (const pattern of QTY_PATTERNS) {
     const m = block.match(pattern);
     if (m) { quantity = parseInt(m[1], 10); break; }
   }
 
-  if (!sellerPrice) return null; // Can't add to inventory without price
+  if (!sellerPrice) return null;
 
-  // Clean model name: remove storage/color/grade tokens that are separate
+  // 国旗検出
+  const countryInfo = detectCountry(block);
+
   const model = modelLine
     .replace(STORAGE_PATTERN, "")
     .replace(new RegExp(COLOR_KEYWORDS.join("|"), "gi"), "")
@@ -122,23 +122,11 @@ function parseBlock(block: string): ParsedInventoryItem | null {
     quantity,
     sellerPrice,
     rawText: block,
+    flag: countryInfo?.flag ?? null,
+    country: countryInfo?.country ?? null,
   };
 }
 
-// ─── Main Export ─────────────────────────────────────────────────────────────
-
-/**
- * Parse raw WhatsApp pasted text into structured inventory items.
- *
- * @example
- * const raw = `
- * iPhone 14 Pro 256 Purple
- * A Grade
- * 2450 AED
- * 5 pcs
- * `;
- * const { items, errors } = parseWhatsAppInventory(raw);
- */
 export function parseWhatsAppInventory(raw: string): ParseResult {
   const blocks = splitIntoBlocks(raw);
   const items: ParsedInventoryItem[] = [];
@@ -156,9 +144,6 @@ export function parseWhatsAppInventory(raw: string): ParseResult {
   return { items, errors };
 }
 
-/**
- * Convert a parsed item into the shape needed for Firestore import.
- */
 export function parsedItemToFirestore(
   item: ParsedInventoryItem,
   adminUid: string
@@ -177,31 +162,25 @@ export function parsedItemToFirestore(
     updatedAt: new Date(),
     importedBy: adminUid,
     notes: "",
+    flag: item.flag ?? null,
+    country: item.country ?? null,
   };
 }
 
-// ─── Sample input for docs / testing ─────────────────────────────────────────
 export const SAMPLE_WHATSAPP_INPUT = `iPhone 14 Pro 256 Purple
+Japan
 A Grade
 2450 AED
 5 pcs
 
 iPhone 13 128GB Black
+US
 A- Grade
 1650 AED
 10 pcs
 
 Samsung S24 Ultra 512GB Titanium Black
+UK
 A+ Grade
 3200 AED
-3 pcs
-
-iPhone 15 Pro Max 256 Natural Titanium
-A Grade
-4100 AED
-2 pcs
-
-iPhone 12 64GB White
-B Grade
-900 AED
-8 pcs`;
+3 pcs`;

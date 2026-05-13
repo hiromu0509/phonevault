@@ -1,6 +1,5 @@
 // ─── User ───────────────────────────────────────────────────────────────────
 export type UserRole = "admin" | "buyer";
-
 export interface AppUser {
   uid: string;
   email: string;
@@ -10,11 +9,9 @@ export interface AppUser {
   approved: boolean;
   createdAt: Date;
 }
-
 // ─── Inventory ───────────────────────────────────────────────────────────────
 export type PhoneGrade = "A+" | "A" | "A-" | "B" | "C";
 export type ItemStatus = "available" | "reserved" | "confirmed" | "sold";
-
 export interface InventoryItem {
   id: string;
   model: string;
@@ -23,18 +20,18 @@ export interface InventoryItem {
   grade: PhoneGrade;
   quantity: number;
   availableQty: number;
-  sellerPrice: number;       // what seller charges
-  buyerPrice: number;        // sellerPrice + COMMISSION (20 AED)
+  sellerPrice: number;
+  buyerPrice: number;
   status: ItemStatus;
   importedAt: Date;
   updatedAt: Date;
-  importedBy: string;        // admin uid
+  importedBy: string;
   notes?: string;
+  flag?: string | null;
+  country?: string | null;
 }
-
 // ─── Reservation ─────────────────────────────────────────────────────────────
 export type ReservationStatus = "pending" | "confirmed" | "cancelled" | "sold";
-
 export interface Reservation {
   id: string;
   inventoryItemId: string;
@@ -55,7 +52,6 @@ export interface Reservation {
   updatedAt: Date;
   notes?: string;
 }
-
 // ─── Parser ──────────────────────────────────────────────────────────────────
 export interface ParsedInventoryItem {
   model: string;
@@ -65,8 +61,9 @@ export interface ParsedInventoryItem {
   quantity: number;
   sellerPrice: number;
   rawText: string;
+  flag?: string | null;
+  country?: string | null;
 }
-
 export interface ParseResult {
   items: ParsedInventoryItem[];
   errors: string[];

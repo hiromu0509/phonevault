@@ -48,7 +48,12 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
     <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h3 className="text-navy-500 font-semibold text-base">{item.model}</h3>
+          <div className="flex items-center gap-2">
+            {item.flag && (
+              <span className="text-xl">{item.flag}</span>
+            )}
+            <h3 className="text-navy-500 font-semibold text-base">{item.model}</h3>
+          </div>
           <p className="text-slate-400 text-sm">{item.storage} - {item.color}</p>
         </div>
         <Badge label={STATUS_LABELS[item.status]} className={STATUS_COLORS[item.status]} />
