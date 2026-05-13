@@ -191,9 +191,15 @@ export default function ImportPage() {
                     >
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div className="flex-1">
-                          <p className="text-white text-sm font-medium leading-snug">
-                            {item.model}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            {item.flag && <span>{item.flag}</span>}
+                            {item.country && !item.flag && (
+                              <span className="text-xs text-amber-400">{item.country}</span>
+                            )}
+                            <p className="text-white text-sm font-medium leading-snug">
+                              {item.model}
+                            </p>
+                          </div>
                           <p className="text-surface-400 text-xs mt-0.5">
                             {item.storage} · {item.color}
                           </p>
@@ -264,13 +270,15 @@ export default function ImportPage() {
                 <p className="text-surface-400 text-xs mb-2 uppercase tracking-wider font-mono">
                   Block format (blank line between items)
                 </p>
-                <pre className="bg-surface-700 rounded-lg p-3 text-xs text-surface-300 font-mono leading-relaxed">
-{`iPhone 14 Pro 256 Purple
+                <pre className="bg-gray-100 rounded-lg p-3 text-xs text-gray-800 font-mono leading-relaxed">
+{`iPhone 17 Pro 256 Orange
+Japan
 A Grade
-2450 AED
-5 pcs
+7070 AED
+50 pcs
 
 Samsung S24 512GB Black
+USA
 A+ Grade
 3200 AED
 2 pcs`}
@@ -288,6 +296,7 @@ A+ Grade
                     ["Grade", "A+, A, A-, B, C (any order)"],
                     ["Price", "Number followed by AED"],
                     ["Qty", "Number + pcs/pieces/units"],
+                    ["Country", "Japan / USA / UK"],
                   ].map(([k, v]) => (
                     <li key={k} className="flex gap-2">
                       <span className="text-amber-400 font-mono w-16 shrink-0">{k}</span>
