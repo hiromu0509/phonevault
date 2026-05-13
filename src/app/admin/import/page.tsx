@@ -104,10 +104,10 @@ export default function ImportPage() {
               <textarea
                 value={raw}
                 onChange={(e) => setRaw(e.target.value)}
-                placeholder={`Paste WhatsApp inventory here, e.g:\n\niPhone 14 Pro 256 Purple\nA Grade\n2450 AED\n5 pcs`}
+                placeholder="Paste WhatsApp inventory here..."
                 rows={18}
-                style={{ color: '#ffffff', backgroundColor: '#1e1e2e' }}
-                className="w-full border border-surface-600 rounded-xl p-4 text-sm font-mono resize-none focus:outline-none focus:border-amber-400/50 transition-colors leading-relaxed placeholder-gray-500"
+                style={{ color: '#1a1a1a', backgroundColor: '#f8f9fa' }}
+                className="w-full border border-gray-300 rounded-xl p-4 text-sm font-mono resize-none focus:outline-none focus:border-amber-400 transition-colors leading-relaxed placeholder-gray-400"
               />
 
               <div className="flex gap-3">
