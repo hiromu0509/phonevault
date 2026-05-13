@@ -1,6 +1,6 @@
-"use client";
+'use client'
 import { useState } from "react";
-import { Package, Tag, Layers } from "lucide-react";
+import { Package, Tag, Layers, MessageCircle } from "lucide-react";
 import { InventoryItem } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { GRADE_COLORS, STATUS_COLORS, STATUS_LABELS } from "@/lib/constants";
@@ -16,24 +16,32 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
   const { profile } = useAuth();
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const canReserve = item.status === "available" && item.availableQty > 0;
+  const canReserve = item.status === 'available' && item.availableQty > 0;
+  const waNumber = '971527110708';
 
   const handleReserve = async () => {
     if (!profile) return;
     setLoading(true);
-    setError("");
+    setError('');
     try {
       await createReservation(item, qty, profile);
       setSuccess(true);
       onReserved?.();
       setTimeout(() => setSuccess(false), 3000);
+      const msg = encodeURIComponent('Hi, I reserved ' + qty + 'x ' + item.model + ' ' + item.storage + ' Grade ' + item.grade + ' at ' + item.buyerPrice + ' AED each.');
+      window.open('https://wa.me/' + waNumber + '?text=' + msg, '_blank');
     } catch (e) {
-      setError("Failed to reserve");
+      setError('Failed to reserve');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleWhatsApp = () => {
+    const msg = encodeURIComponent('Hi, I am interested in: ' + item.model + ' ' + item.storage + ' Grade ' + item.grade + ' - ' + item.buyerPrice + ' AED. Is it available?');
+    window.open('https://wa.me/' + waNumber + '?text=' + msg, '_blank');
   };
 
   return (
@@ -75,10 +83,14 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
             <button onClick={() => setQty(q => Math.min(item.availableQty, q + 1))} className="px-3 py-2 text-slate-400 text-sm">+</button>
           </div>
           <button onClick={handleReserve} disabled={loading} className="flex-1 bg-navy-500 text-white font-medium rounded-lg py-2 text-sm">
-            {loading ? "..." : success ? "Reserved!" : "Reserve"}
+            {loading ? '...' : success ? 'Reserved!' : 'Reserve'}
           </button>
         </div>
       )}
+      <button onClick={handleWhatsApp} className="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg py-2 text-sm">
+        <MessageCircle size={15} />
+        WhatsApp
+      </button>
       {error && <p className="text-rose-500 text-xs">{error}</p>}
       {canReserve && qty > 1 && (
         <p className="text-slate-400 text-xs text-right">
