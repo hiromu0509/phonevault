@@ -18,8 +18,6 @@ import { db } from "@/lib/firebase";
 import { COLLECTIONS, COMMISSION_AED } from "@/lib/constants";
 import { InventoryItem, Reservation, AppUser, ParsedInventoryItem } from "@/types";
 
-// ─── Converters ──────────────────────────────────────────────────────────────
-
 function fromFirestore<T>(doc: any): T {
   const data = doc.data();
   return {
@@ -30,8 +28,6 @@ function fromFirestore<T>(doc: any): T {
     createdAt: data.createdAt?.toDate?.() ?? new Date(),
   } as T;
 }
-
-// ─── Users ───────────────────────────────────────────────────────────────────
 
 export async function getUserProfile(uid: string): Promise<AppUser | null> {
   const ref = doc(db, COLLECTIONS.USERS, uid);
@@ -52,8 +48,6 @@ export async function updateUserApproval(uid: string, approved: boolean) {
 export async function updateUserRole(uid: string, role: "admin" | "buyer") {
   await updateDoc(doc(db, COLLECTIONS.USERS, uid), { role });
 }
-
-// ─── Inventory ───────────────────────────────────────────────────────────────
 
 export async function getInventory(statusFilter?: string): Promise<InventoryItem[]> {
   const constraints: QueryConstraint[] = [orderBy("importedAt", "desc")];
@@ -98,6 +92,8 @@ export async function importInventoryBatch(
       updatedAt: Timestamp.now(),
       importedBy: adminUid,
       notes: "",
+      flag: item.flag ?? null,
+      country: item.country ?? null,
     });
   });
   await batch.commit();
@@ -117,17 +113,13 @@ export async function deleteInventoryItem(id: string) {
   await deleteDoc(doc(db, COLLECTIONS.INVENTORY, id));
 }
 
-// ─── Reservations ─────────────────────────────────────────────────────────────
-
 export async function createReservation(
   item: InventoryItem,
   quantity: number,
   buyer: AppUser
 ): Promise<string> {
-  // 1. Check availability
   if (item.availableQty < quantity) throw new Error("Not enough stock");
 
-  // 2. Create reservation doc
   const resRef = await addDoc(collection(db, COLLECTIONS.RESERVATIONS), {
     inventoryItemId: item.id,
     inventorySnapshot: {
@@ -147,7 +139,6 @@ export async function createReservation(
     updatedAt: Timestamp.now(),
   });
 
-  // 3. Decrement available qty
   const newAvailable = item.availableQty - quantity;
   await updateDoc(doc(db, COLLECTIONS.INVENTORY, item.id), {
     availableQty: newAvailable,
@@ -186,13 +177,11 @@ export async function updateReservationStatus(
 ) {
   const batch = writeBatch(db);
 
-  // Update reservation
   batch.update(doc(db, COLLECTIONS.RESERVATIONS, reservationId), {
     status,
     updatedAt: Timestamp.now(),
   });
 
-  // If cancelled, restore qty
   if (status === "cancelled") {
     const invRef = doc(db, COLLECTIONS.INVENTORY, inventoryItemId);
     const invSnap = await getDoc(invRef);
@@ -207,7 +196,6 @@ export async function updateReservationStatus(
     }
   }
 
-  // If sold, mark inventory sold
   if (status === "sold") {
     batch.update(doc(db, COLLECTIONS.INVENTORY, inventoryItemId), {
       status: "sold",
