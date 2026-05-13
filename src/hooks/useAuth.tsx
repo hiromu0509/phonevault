@@ -1,10 +1,10 @@
 "use client";
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  createUserWithEmailAndPassword,
   User,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
@@ -18,6 +18,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  register: (email: string, password: string, displayName: string, companyName: string, phone: string) => Promise<void>;
   isAdmin: boolean;
 }
 
@@ -52,7 +53,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const cred = await signInWithEmailAndPassword(auth, email, password);
-    // Ensure user profile exists
     const ref = doc(db, COLLECTIONS.USERS, cred.user.uid);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
@@ -61,18 +61,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         displayName: cred.user.displayName || email.split("@")[0],
         role: "buyer",
         companyName: "",
+        phone: "",
         approved: false,
         createdAt: Timestamp.now(),
       });
     }
   };
 
-  const logout = () => signOut(auth);
+  const register = async (
+    email: string,
+    password: string,
+    displayName: string,
+    companyName: string,
+    phone: string
+  ) => {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, COLLECTIONS.USERS, cred.user.uid), {
+      email,
+      displayName,
+      companyName,
+      phone,
+      role: "buyer",
+      approved: false,
+      createdAt: Timestamp.now(),
+    });
+    await signOut(auth);
+  };
 
+  const logout = () => signOut(auth);
   const isAdmin = profile?.role === "admin";
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, login, logout, isAdmin }}>
+    <AuthContext.Provider value={{ user, profile, loading, login, logout, register, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
