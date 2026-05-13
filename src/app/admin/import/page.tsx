@@ -106,7 +106,8 @@ export default function ImportPage() {
                 onChange={(e) => setRaw(e.target.value)}
                 placeholder={`Paste WhatsApp inventory here, e.g:\n\niPhone 14 Pro 256 Purple\nA Grade\n2450 AED\n5 pcs`}
                 rows={18}
-                className="w-full bg-surface-800 border border-surface-600 text-white placeholder-surface-500 rounded-xl p-4 text-sm font-mono resize-none focus:outline-none focus:border-amber-400/50 transition-colors leading-relaxed"
+                style={{ color: '#ffffff', backgroundColor: '#1e1e2e' }}
+                className="w-full border border-surface-600 rounded-xl p-4 text-sm font-mono resize-none focus:outline-none focus:border-amber-400/50 transition-colors leading-relaxed placeholder-gray-500"
               />
 
               <div className="flex gap-3">
@@ -128,7 +129,6 @@ export default function ImportPage() {
                 )}
               </div>
 
-              {/* Errors */}
               {errors.length > 0 && (
                 <div className="space-y-1.5">
                   <p className="text-surface-400 text-xs uppercase tracking-wider font-mono">
