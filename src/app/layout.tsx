@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
 
 export const metadata: Metadata = {
-  title: "PhoneVault — B2B Wholesale",
+  title: "Best of Best — Wholesale",
   description: "Closed B2B mobile phone wholesale platform",
 };
 

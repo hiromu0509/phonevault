@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, BookMarked, Upload, Users } from "lucide-react";
+import { LayoutDashboard, BookMarked, Upload, Users, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import clsx from "clsx";
 
 export default function MobileNav() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, logout } = useAuth();
   const pathname = usePathname();
 
   const items = [
@@ -40,6 +40,13 @@ export default function MobileNav() {
             </Link>
           );
         })}
+        <button
+          onClick={logout}
+          className="flex flex-col items-center gap-1 py-3 px-4 text-[10px] font-medium text-surface-400 hover:text-red-400 transition-colors"
+        >
+          <LogOut size={20} />
+          Sign Out
+        </button>
       </div>
     </nav>
   );
