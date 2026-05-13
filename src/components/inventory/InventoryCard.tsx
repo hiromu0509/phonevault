@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Package, Tag, Layers } from "lucide-react";
 import { InventoryItem } from "@/types";
@@ -19,22 +18,10 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-
   const canReserve = item.status === "available" && item.availableQty > 0;
-
-  const handleQtyChange = (val: string) => {
-    const num = parseInt(val, 10);
-    if (isNaN(num) || num < 1) { setQty(1); return; }
-    if (num > item.availableQty) { setQty(item.availableQty); return; }
-    setQty(num);
-  };
 
   const handleReserve = async () => {
     if (!profile) return;
-    if (qty < 1 || qty > item.availableQty) {
-      setError("Max available: " + item.availableQty);
-      return;
-    }
     setLoading(true);
     setError("");
     try {
@@ -50,26 +37,22 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-4 shadow-card hover:shadow-md transition-all">
+    <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h3 className="text-navy-500 font-semibold text-base leading-snug">{item.model}</h3>
-          <p className="text-slate-400 text-sm mt-0.5">{item.storage} - {item.color}</p>
+          <h3 className="text-navy-500 font-semibold text-base">{item.model}</h3>
+          <p className="text-slate-400 text-sm">{item.storage} - {item.color}</p>
         </div>
         <Badge label={STATUS_LABELS[item.status]} className={STATUS_COLORS[item.status]} />
       </div>
-
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex items-center gap-1.5">
-          <Layers size={13} className="text-slate-400" />
-          <Badge label={item.grade} className={GRADE_COLORS[item.grade]} />
-        </div>
-        <div className="flex items-center gap-1.5 text-slate-400 text-sm">
-          <Package size={13} />
-          <span><span className="text-navy-500 font-medium">{item.availableQty}</span>/{item.quantity} pcs</span>
-        </div>
+      <div className="flex items-center gap-3">
+        <Layers size={13} className="text-slate-400" />
+        <Badge label={item.grade} className={GRADE_COLORS[item.grade]} />
+        <Package size={13} className="text-slate-400" />
+        <span className="text-slate-400 text-sm">
+          <span className="text-navy-500 font-medium">{item.availableQty}</span>/{item.quantity} pcs
+        </span>
       </div>
-
       <div className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-4 py-3">
         <div className="flex items-center gap-1.5">
           <Tag size={13} className="text-navy-500" />
@@ -77,28 +60,31 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
         </div>
         <span className="text-navy-500 font-mono font-semibold text-lg">{item.buyerPrice.toLocaleString()} AED</span>
       </div>
-
       {canReserve && (
         <div className="flex items-center gap-2">
           <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
-            <button onClick={() => setQty(function(q) { return Math.max(1, q - 1); })} className="px-3 py-2 text-slate-400 hover:text-navy-500 hover:bg-slate-50 transition-colors text-sm font-medium">-</button>
+            <button onClick={() => setQty(q => Math.max(1, q - 1))} className="px-3 py-2 text-slate-400 text-sm">-</button>
             <input
               type="number"
               min={1}
               max={item.availableQty}
               value={qty}
-              onChange={function(e) { handleQtyChange(e.target.value); }}
-              className="w-16 text-center text-navy-500 text-sm font-mono py-2 border-x border-slate-200 focus:outline-none bg-white"
+              onChange={e => setQty(Math.min(item.availableQty, Math.max(1, parseInt(e.target.value) || 1)))}
+              className="w-16 text-center text-navy-500 text-sm py-2 border-x border-slate-200 focus:outline-none bg-white"
             />
-            <button onClick={() => setQty(function(q) { return Math.min(item.availableQty, q + 1); })} className="px-3 py-2 text-slate-400 hover:text-navy-500 hover:bg-slate-50 transition-colors text-sm font-medium">+</button>
+            <button onClick={() => setQty(q => Math.min(item.availableQty, q + 1))} className="px-3 py-2 text-slate-400 text-sm">+</button>
           </div>
-          <button onClick={handleReserve} disabled={loading} className="flex-1 bg-navy-500 hover:bg-navy-600 text-white font-medium rounded-lg py-2 text-sm transition-all disabled:opacity-50">
+          <button onClick={handleReserve} disabled={loading} className="flex-1 bg-navy-500 text-white font-medium rounded-lg py-2 text-sm">
             {loading ? "..." : success ? "Reserved!" : "Reserve"}
           </button>
         </div>
       )}
-
       {error && <p className="text-rose-500 text-xs">{error}</p>}
-
       {canReserve && qty > 1 && (
-        <p className="text-slate-400 text
+        <p className="text-slate-400 text-xs text-right">
+          Total: <span className="text-navy-500 font-mono font-medium">{(item.buyerPrice * qty).toLocaleString()} AED</span>
+        </p>
+      )}
+    </div>
+  );
+}
