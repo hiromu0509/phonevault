@@ -64,16 +64,16 @@ export default function DashboardPage() {
           href="https://www.instagram.com/bestofbest1249"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 mb-6 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-orange-400/20 border border-pink-500/30 hover:border-pink-400/60 transition-all group"
+          className="flex items-center gap-3 mb-6 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 border border-pink-400 hover:opacity-90 transition-all group shadow-sm"
         >
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
             <Instagram size={18} className="text-white" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-sm font-semibold">@bestofbest1249</p>
-            <p className="text-surface-400 text-xs">Follow us for the latest arrivals &amp; deals</p>
+            <p className="text-white/80 text-xs">Follow us for the latest arrivals &amp; deals</p>
           </div>
-          <span className="text-pink-400 text-xs font-medium group-hover:text-pink-300 shrink-0">Follow →</span>
+          <span className="text-white text-xs font-medium group-hover:text-white/80 shrink-0">Follow →</span>
         </a>
 
         {/* Page header */}
