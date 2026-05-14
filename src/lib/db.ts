@@ -38,7 +38,7 @@ export async function getUserProfile(uid: string): Promise<AppUser | null> {
 
 export async function getAllUsers(): Promise<AppUser[]> {
   const snap = await getDocs(collection(db, COLLECTIONS.USERS));
-  return snap.docs.map((d) => fromFirestore<AppUser>(d));
+  return snap.docs.map((d) => ({ ...fromFirestore<AppUser>(d), uid: d.id }));
 }
 
 export async function updateUserApproval(uid: string, approved: boolean) {
