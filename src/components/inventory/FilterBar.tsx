@@ -1,7 +1,9 @@
 "use client";
 
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, HelpCircle } from "lucide-react";
+import { useState } from "react";
 import clsx from "clsx";
+import GradingModal from "@/components/ui/GradingModal";
 
 interface FilterBarProps {
   search: string;
@@ -23,8 +25,11 @@ export default function FilterBar({
   gradeFilter,
   onGradeFilter,
 }: FilterBarProps) {
+  const [gradingOpen, setGradingOpen] = useState(false);
+
   return (
     <div className="flex flex-col gap-3">
+      <GradingModal open={gradingOpen} onClose={() => setGradingOpen(false)} />
       <div className="relative">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
@@ -55,7 +60,7 @@ export default function FilterBar({
           ))}
         </div>
         <div className="w-px h-4 bg-slate-200 hidden sm:block" />
-        <div className="flex gap-1.5 flex-wrap">
+        <div className="flex gap-1.5 flex-wrap items-center">
           {GRADE_OPTIONS.map((g) => (
             <button
               key={g}
@@ -70,6 +75,14 @@ export default function FilterBar({
               {g === "all" ? "All Grades" : g}
             </button>
           ))}
+          <button
+            onClick={() => setGradingOpen(true)}
+            className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border border-slate-200 bg-white text-slate-400 hover:text-navy-500 hover:border-navy-500 transition-all"
+            title="Grading Guide"
+          >
+            <HelpCircle size={12} />
+            <span className="hidden sm:inline">What&apos;s this?</span>
+          </button>
         </div>
       </div>
     </div>
