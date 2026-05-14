@@ -62,7 +62,6 @@ export interface ParsedInventoryItem {
   grade: PhoneGrade;
   quantity: number;
   sellerPrice: number;
-  buyerPriceUSD?: number;
   rawText: string;
   flag?: string | null;
   country?: string | null;

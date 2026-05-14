@@ -78,9 +78,7 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
         </div>
         <div className="text-right">
           <span className="text-navy-500 font-mono font-semibold text-lg">{item.buyerPrice.toLocaleString()} AED</span>
-          <p className="text-sky-500 font-mono text-xs font-semibold">
-            {item.buyerPriceUSD ? `$${item.buyerPriceUSD.toLocaleString()}` : toUsd(item.buyerPrice)}
-          </p>
+          <p className="text-sky-500 font-mono text-xs font-semibold">{toUsd(item.buyerPrice)}</p>
         </div>
       </div>
       {canReserve && (
