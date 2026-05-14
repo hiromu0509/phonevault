@@ -17,6 +17,7 @@ import {
 import { importInventoryBatch } from "@/lib/db";
 import { useAuth } from "@/hooks/useAuth";
 import { ParsedInventoryItem } from "@/types";
+import { COMMISSION_AED } from "@/lib/constants";
 import clsx from "clsx";
 
 type Tab = "text" | "excel" | "screenshot";
@@ -43,6 +44,7 @@ export default function ImportPage() {
   const [parsed, setParsed] = useState<ParsedInventoryItem[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [usdPrices, setUsdPrices] = useState<number[]>([]);
   const [importing, setImporting] = useState(false);
   const [importDone, setImportDone] = useState(false);
 
@@ -50,13 +52,14 @@ export default function ImportPage() {
     setParsed(items);
     setErrors(errs);
     setSelected(new Set(items.map((_, i) => i)));
+    setUsdPrices(items.map((item) => Math.round((item.sellerPrice + COMMISSION_AED) / 3.67)));
     setImportDone(false);
   };
 
   const reset = () => {
     setRaw(""); setExcelFile(null); setImgFile(null);
     setImgPreview(null); setAnalyzeError(null);
-    setParsed([]); setErrors([]); setSelected(new Set());
+    setParsed([]); setErrors([]); setSelected(new Set()); setUsdPrices([]);
   };
 
   // ── Text parse ──────────────────────────────────────────────────────────────
@@ -124,7 +127,10 @@ export default function ImportPage() {
     if (!user || selected.size === 0) return;
     setImporting(true);
     try {
-      const toImport = parsed.filter((_, i) => selected.has(i));
+      const toImport = [...selected].sort((a, b) => a - b).map((i) => ({
+        ...parsed[i],
+        buyerPriceUSD: usdPrices[i] || undefined,
+      }));
       await importInventoryBatch(toImport, user.uid);
       setImportDone(true);
       reset();
@@ -372,6 +378,23 @@ export default function ImportPage() {
                         <span className="ml-auto text-amber-500 font-mono text-sm font-semibold">
                           {item.sellerPrice.toLocaleString()} AED
                         </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-100" onClick={e => e.stopPropagation()}>
+                        <span className="text-slate-400 text-xs">Buyer USD</span>
+                        <div className="flex items-center gap-1 ml-auto border border-slate-200 rounded-lg overflow-hidden">
+                          <span className="text-slate-400 text-xs px-2">$</span>
+                          <input
+                            type="number"
+                            min={0}
+                            value={usdPrices[i] ?? 0}
+                            onChange={e => {
+                              const next = [...usdPrices];
+                              next[i] = Number(e.target.value);
+                              setUsdPrices(next);
+                            }}
+                            className="w-20 text-right text-sky-600 font-mono text-sm py-1 pr-2 focus:outline-none bg-white"
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}

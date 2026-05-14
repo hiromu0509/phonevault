@@ -87,6 +87,7 @@ export async function importInventoryBatch(
       availableQty: item.quantity,
       sellerPrice: item.sellerPrice,
       buyerPrice: item.sellerPrice + COMMISSION_AED,
+      buyerPriceUSD: item.buyerPriceUSD ?? null,
       status: "available",
       importedAt: Timestamp.now(),
       updatedAt: Timestamp.now(),

@@ -23,6 +23,7 @@ export interface InventoryItem {
   availableQty: number;
   sellerPrice: number;
   buyerPrice: number;
+  buyerPriceUSD?: number;
   status: ItemStatus;
   importedAt: Date;
   updatedAt: Date;
@@ -61,6 +62,7 @@ export interface ParsedInventoryItem {
   grade: PhoneGrade;
   quantity: number;
   sellerPrice: number;
+  buyerPriceUSD?: number;
   rawText: string;
   flag?: string | null;
   country?: string | null;
