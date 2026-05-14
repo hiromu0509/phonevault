@@ -13,6 +13,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<AppUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -24,17 +25,23 @@ export default function UsersPage() {
 
   const toggleApproval = async (u: AppUser) => {
     setUpdating(u.uid);
+    setError(null);
     try {
       await updateUserApproval(u.uid, !u.approved);
       await load();
+    } catch (e: any) {
+      setError(`Failed to update approval: ${e?.message ?? e}`);
     } finally { setUpdating(null); }
   };
 
   const toggleRole = async (u: AppUser) => {
     setUpdating(u.uid + "-role");
+    setError(null);
     try {
       await updateUserRole(u.uid, u.role === "admin" ? "buyer" : "admin");
       await load();
+    } catch (e: any) {
+      setError(`Failed to update role: ${e?.message ?? e}`);
     } finally { setUpdating(null); }
   };
 
@@ -57,6 +64,13 @@ export default function UsersPage() {
               Refresh
             </Button>
           </div>
+
+          {/* Error alert */}
+          {error && (
+            <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-red-600 text-sm font-medium">{error}</p>
+            </div>
+          )}
 
           {/* Pending alert */}
           {pending > 0 && (
