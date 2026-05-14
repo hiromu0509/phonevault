@@ -65,6 +65,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         approved: false,
         createdAt: Timestamp.now(),
       });
+      await signOut(auth);
+      const err = new Error("not-approved") as any;
+      err.code = "auth/not-approved";
+      throw err;
     } else {
       const data = snap.data();
       if (!data.approved && data.role !== "admin") {

@@ -6,77 +6,77 @@ import AppShell from "@/components/layout/AppShell";
 const grades = [
   {
     grade: "A+",
-    label: "未使用品同等",
-    color: "text-emerald-400",
-    border: "border-emerald-400/40",
-    bg: "bg-emerald-400/5",
-    dot: "bg-emerald-400",
+    label: "Like New",
+    color: "text-emerald-600",
+    border: "border-emerald-300",
+    bg: "bg-emerald-50",
+    dot: "bg-emerald-500",
     points: [
-      "新品・未使用または開封済み未使用",
-      "傷・汚れ・へこみが一切なし",
-      "バッテリー容量 95% 以上",
-      "付属品・箱あり（または同等品）",
-      "すべての機能が正常動作",
+      "Unused or opened-but-unused condition",
+      "No scratches, marks, or dents whatsoever",
+      "Battery health 95%+",
+      "Includes accessories / box (or equivalent)",
+      "All functions working perfectly",
     ],
   },
   {
     grade: "A",
-    label: "極美品",
-    color: "text-emerald-300",
-    border: "border-emerald-300/40",
-    bg: "bg-emerald-300/5",
-    dot: "bg-emerald-300",
+    label: "Excellent",
+    color: "text-emerald-500",
+    border: "border-emerald-200",
+    bg: "bg-emerald-50/60",
+    dot: "bg-emerald-400",
     points: [
-      "ごく軽微な使用感のみ（通常使用の範囲内）",
-      "目立つ傷・汚れなし",
-      "バッテリー容量 85% 以上",
-      "画面・ボディともにクリアな状態",
-      "すべての機能が正常動作",
+      "Minimal signs of use only (normal wear)",
+      "No visible scratches or marks",
+      "Battery health 85%+",
+      "Screen and body in clear condition",
+      "All functions working perfectly",
     ],
   },
   {
     grade: "A-",
-    label: "美品",
-    color: "text-amber-400",
-    border: "border-amber-400/40",
-    bg: "bg-amber-400/5",
-    dot: "bg-amber-400",
+    label: "Very Good",
+    color: "text-amber-600",
+    border: "border-amber-300",
+    bg: "bg-amber-50",
+    dot: "bg-amber-500",
     points: [
-      "わずかな細かい傷あり（目立たないレベル）",
-      "画面に軽微なすり傷の可能性あり",
-      "バッテリー容量 80% 以上",
-      "ボディに小さな使用感あり",
-      "すべての機能が正常動作",
+      "Minor fine scratches (not noticeable in use)",
+      "Possible light scuffs on screen",
+      "Battery health 80%+",
+      "Small signs of use on body",
+      "All functions working perfectly",
     ],
   },
   {
     grade: "B",
-    label: "良品",
-    color: "text-orange-400",
-    border: "border-orange-400/40",
-    bg: "bg-orange-400/5",
-    dot: "bg-orange-400",
+    label: "Good",
+    color: "text-orange-600",
+    border: "border-orange-300",
+    bg: "bg-orange-50",
+    dot: "bg-orange-500",
     points: [
-      "目立つ傷・すり傷が複数あり",
-      "ボディに軽微なへこみの可能性あり",
-      "バッテリー容量 75% 以上",
-      "画面に目立つすり傷の可能性あり",
-      "機能はすべて正常動作",
+      "Visible scratches or scuffs on body",
+      "Possible minor dents",
+      "Battery health 75%+",
+      "Visible scuffs on screen possible",
+      "All functions working normally",
     ],
   },
   {
     grade: "C",
-    label: "訳あり品",
-    color: "text-rose-400",
-    border: "border-rose-400/40",
-    bg: "bg-rose-400/5",
-    dot: "bg-rose-400",
+    label: "Fair",
+    color: "text-red-600",
+    border: "border-red-300",
+    bg: "bg-red-50",
+    dot: "bg-red-500",
     points: [
-      "明らかな傷・へこみ・割れがあり",
-      "画面割れ・液晶不良の可能性あり",
-      "バッテリー容量 70% 以上",
-      "外観上の大きなダメージあり",
-      "基本機能は動作（一部制限の可能性あり）",
+      "Clear scratches, dents, or cracks visible",
+      "Possible screen damage or display issues",
+      "Battery health 70%+",
+      "Significant cosmetic damage",
+      "Core functions operational (some limitations possible)",
     ],
   },
 ];
@@ -87,9 +87,9 @@ export default function GradingPage() {
       <AppShell>
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-white text-2xl font-semibold">グレーディング基準</h1>
-            <p className="text-surface-400 text-sm mt-1">
-              Best of Best が採用する端末状態評価の基準です。
+            <h1 className="text-navy-500 text-2xl font-semibold">Grading Standards</h1>
+            <p className="text-slate-400 text-sm mt-1">
+              Device condition criteria used by Best of Best.
             </p>
           </div>
 
@@ -100,17 +100,17 @@ export default function GradingPage() {
                 className={`rounded-xl border ${border} ${bg} p-5`}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-12 h-12 rounded-xl border-2 ${border} flex items-center justify-center`}>
+                  <div className={`w-12 h-12 rounded-xl border-2 ${border} bg-white flex items-center justify-center`}>
                     <span className={`font-bold text-lg ${color}`}>{grade}</span>
                   </div>
                   <div>
                     <p className={`font-semibold text-base ${color}`}>{grade}</p>
-                    <p className="text-surface-400 text-sm">{label}</p>
+                    <p className="text-slate-500 text-sm">{label}</p>
                   </div>
                 </div>
                 <ul className="space-y-1.5">
                   {points.map((point) => (
-                    <li key={point} className="flex items-start gap-2 text-surface-300 text-sm">
+                    <li key={point} className="flex items-start gap-2 text-slate-600 text-sm">
                       <span className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
                       {point}
                     </li>
@@ -120,11 +120,10 @@ export default function GradingPage() {
             ))}
           </div>
 
-          <div className="mt-6 bg-surface-800 border border-surface-600 rounded-xl p-4">
-            <p className="text-surface-400 text-xs leading-relaxed">
-              ※ 上記グレードはすべて工場出荷時設定（初期化済み）の端末が対象です。
-              バッテリー容量は目安であり、個体差があります。
-              詳細は各商品の備考欄をご確認ください。
+          <div className="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <p className="text-slate-400 text-xs leading-relaxed">
+              * All devices are factory reset. Battery health is approximate and may vary by unit.
+              Please refer to individual product notes for details.
             </p>
           </div>
         </div>
