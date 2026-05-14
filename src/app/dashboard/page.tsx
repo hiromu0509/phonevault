@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { RefreshCw, Package } from "lucide-react";
+import { RefreshCw, Package, Instagram } from "lucide-react";
 import AuthGuard from "@/components/layout/AuthGuard";
 import AppShell from "@/components/layout/AppShell";
 import InventoryCard from "@/components/inventory/InventoryCard";
@@ -59,6 +59,23 @@ export default function DashboardPage() {
   return (
     <AuthGuard>
       <AppShell>
+        {/* Instagram banner */}
+        <a
+          href="https://www.instagram.com/bestofbest1249"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 mb-6 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-orange-400/20 border border-pink-500/30 hover:border-pink-400/60 transition-all group"
+        >
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 flex items-center justify-center shrink-0">
+            <Instagram size={18} className="text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white text-sm font-semibold">@bestofbest1249</p>
+            <p className="text-surface-400 text-xs">最新入荷・お得情報はInstagramをチェック</p>
+          </div>
+          <span className="text-pink-400 text-xs font-medium group-hover:text-pink-300 shrink-0">フォローする →</span>
+        </a>
+
         {/* Page header */}
         <div className="flex items-center justify-between mb-6">
           <div>
