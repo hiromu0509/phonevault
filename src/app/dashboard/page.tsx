@@ -71,9 +71,9 @@ export default function DashboardPage() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white text-sm font-semibold">@bestofbest1249</p>
-            <p className="text-surface-400 text-xs">最新入荷・お得情報はInstagramをチェック</p>
+            <p className="text-surface-400 text-xs">Follow us for the latest arrivals &amp; deals</p>
           </div>
-          <span className="text-pink-400 text-xs font-medium group-hover:text-pink-300 shrink-0">フォローする →</span>
+          <span className="text-pink-400 text-xs font-medium group-hover:text-pink-300 shrink-0">Follow →</span>
         </a>
 
         {/* Page header */}
