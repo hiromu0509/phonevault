@@ -31,14 +31,16 @@ export default function LoginPage() {
       router.replace("/dashboard");
     } catch (err: any) {
       const code = err?.code || "";
-      if (code.includes("wrong-password") || code.includes("invalid-credential")) {
-        setError("Invalid email or password.");
+      if (code.includes("not-approved")) {
+        setError("アカウントはまだ承認されていません。管理者の承認をお待ちください。");
+      } else if (code.includes("wrong-password") || code.includes("invalid-credential")) {
+        setError("メールアドレスまたはパスワードが正しくありません。");
       } else if (code.includes("user-not-found")) {
-        setError("No account found for this email.");
+        setError("このメールアドレスのアカウントが見つかりません。");
       } else if (code.includes("too-many-requests")) {
-        setError("Too many attempts. Please wait before trying again.");
+        setError("試行回数が多すぎます。しばらく待ってから再試行してください。");
       } else {
-        setError("Login failed. Please try again.");
+        setError("ログインに失敗しました。再試行してください。");
       }
     } finally {
       setSubmitting(false);

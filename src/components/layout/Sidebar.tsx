@@ -1,18 +1,22 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, BookMarked, Upload, Users, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, BookMarked, Upload, Users, LogOut, Menu, X, Award, Instagram } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import clsx from 'clsx';
 import { useState } from 'react';
 
+const INSTAGRAM_URL = "https://www.instagram.com/bestofbest1249";
+
 const buyerNav = [
   { href: '/dashboard', label: 'Inventory', icon: LayoutDashboard },
   { href: '/reservations', label: 'My Reservations', icon: BookMarked },
+  { href: '/grading', label: 'Grading Guide', icon: Award },
 ];
 const adminNav = [
   { href: '/dashboard', label: 'Inventory', icon: LayoutDashboard },
   { href: '/reservations', label: 'Reservations', icon: BookMarked },
+  { href: '/grading', label: 'Grading Guide', icon: Award },
   { href: '/admin/import', label: 'Import Stock', icon: Upload },
   { href: '/admin/users', label: 'Users', icon: Users },
 ];
@@ -79,6 +83,15 @@ export default function Sidebar() {
               {isAdmin ? 'Admin' : 'Buyer'}
             </span>
           </div>
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:text-pink-500 hover:bg-pink-50 transition-all"
+          >
+            <Instagram size={16} />
+            <span>Instagram</span>
+          </a>
           <button
             onClick={logout}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all"
@@ -130,6 +143,15 @@ export default function Sidebar() {
                 {isAdmin ? 'Admin' : 'Buyer'}
               </span>
             </div>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-pink-500 hover:bg-pink-50 transition-all"
+            >
+              <Instagram size={18} />
+              <span>Instagram</span>
+            </a>
             <button
               onClick={logout}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-all"

@@ -6,6 +6,7 @@ export interface AppUser {
   displayName: string;
   role: UserRole;
   companyName: string;
+  phone?: string;
   approved: boolean;
   createdAt: Date;
 }

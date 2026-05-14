@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, RefreshCw, ShieldCheck, ShieldOff, UserCheck, UserX } from "lucide-react";
+import { Users, RefreshCw, ShieldCheck, ShieldOff, UserCheck, UserX, Phone } from "lucide-react";
 import AuthGuard from "@/components/layout/AuthGuard";
 import AppShell from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/Button";
@@ -112,6 +112,12 @@ export default function UsersPage() {
                           <span className="ml-2 text-surface-500">· {u.companyName}</span>
                         )}
                       </p>
+                      {u.phone && (
+                        <p className="text-surface-500 text-xs mt-0.5 flex items-center gap-1">
+                          <Phone size={10} />
+                          {u.phone}
+                        </p>
+                      )}
                     </div>
 
                     {/* Actions */}
