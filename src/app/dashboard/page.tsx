@@ -78,11 +78,22 @@ export default function DashboardPage() {
 
         {/* Page header */}
         <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-white text-2xl font-semibold">Inventory</h1>
-            <p className="text-surface-400 text-sm mt-0.5">
-              Live wholesale stock · prices include commission
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-navy-500 rounded-xl flex items-center justify-center shadow-md shrink-0">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <rect x="7" y="8" width="10" height="13" rx="1.5" fill="white"/>
+                <rect x="9" y="10" width="6" height="7" rx="0.5" fill="#1E3A8A"/>
+                <circle cx="12" cy="19" r="0.8" fill="#1E3A8A"/>
+                <path d="M5 8L7 5L9 7L12 3L15 7L17 5L19 8H5Z" fill="#FFD700"/>
+                <circle cx="7" cy="5" r="1" fill="#FFD700"/>
+                <circle cx="12" cy="3" r="1" fill="#FFD700"/>
+                <circle cx="17" cy="5" r="1" fill="#FFD700"/>
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-navy-500 text-xl font-bold leading-none">Best of Best</h1>
+              <p className="text-slate-400 text-xs mt-0.5">Live wholesale stock</p>
+            </div>
           </div>
           <Button variant="ghost" size="sm" onClick={load} disabled={loading}>
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
