@@ -10,6 +10,8 @@ import { updateReservationStatus } from "@/lib/db";
 import { useAuth } from "@/hooks/useAuth";
 import clsx from "clsx";
 
+const toUsd = (aed: number) => "$" + Math.round(aed / 3.67).toLocaleString();
+
 const RES_STATUS_COLORS: Record<string, string> = {
   pending: "text-amber-400 bg-amber-400/10 border-amber-400/30",
   confirmed: "text-sky-400 bg-sky-400/10 border-sky-400/30",
@@ -164,10 +166,12 @@ export default function ReservationCard({ reservation: r, onUpdated }: Reservati
         <div className="bg-slate-50 rounded-lg px-3 py-2.5">
           <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Unit</p>
           <p className="text-amber-500 font-mono font-medium">{snap.buyerPrice.toLocaleString()} AED</p>
+          <p className="text-slate-400 font-mono text-[10px]">{toUsd(snap.buyerPrice)}</p>
         </div>
         <div className="bg-slate-50 rounded-lg px-3 py-2.5">
           <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Total</p>
           <p className="text-amber-500 font-mono font-semibold">{r.totalPrice.toLocaleString()} AED</p>
+          <p className="text-slate-400 font-mono text-[10px]">{toUsd(r.totalPrice)}</p>
         </div>
       </div>
 

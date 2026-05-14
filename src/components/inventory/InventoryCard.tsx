@@ -12,6 +12,8 @@ interface InventoryCardProps {
   onReserved?: () => void;
 }
 
+const toUsd = (aed: number) => "$" + Math.round(aed / 3.67).toLocaleString();
+
 export default function InventoryCard({ item, onReserved }: InventoryCardProps) {
   const { profile } = useAuth();
   const [qty, setQty] = useState(1);
@@ -74,7 +76,10 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
           <Tag size={13} className="text-navy-500" />
           <span className="text-slate-400 text-xs">Unit Price</span>
         </div>
-        <span className="text-navy-500 font-mono font-semibold text-lg">{item.buyerPrice.toLocaleString()} AED</span>
+        <div className="text-right">
+          <span className="text-navy-500 font-mono font-semibold text-lg">{item.buyerPrice.toLocaleString()} AED</span>
+          <p className="text-slate-400 font-mono text-xs">{toUsd(item.buyerPrice)}</p>
+        </div>
       </div>
       {canReserve && (
         <div className="flex items-center gap-2">
@@ -103,6 +108,7 @@ export default function InventoryCard({ item, onReserved }: InventoryCardProps) 
       {canReserve && qty > 1 && (
         <p className="text-slate-400 text-xs text-right">
           Total: <span className="text-navy-500 font-mono font-medium">{(item.buyerPrice * qty).toLocaleString()} AED</span>
+          <span className="ml-1.5 text-slate-400 font-mono">({toUsd(item.buyerPrice * qty)})</span>
         </p>
       )}
     </div>
