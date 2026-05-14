@@ -47,10 +47,10 @@ export default function ReservationsPage() {
       <AppShell>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-white text-2xl font-semibold">
+            <h1 className="text-navy-500 text-2xl font-semibold">
               {isAdmin ? "All Reservations" : "My Reservations"}
             </h1>
-            <p className="text-surface-400 text-sm mt-0.5">
+            <p className="text-slate-400 text-sm mt-0.5">
               {isAdmin ? "Manage buyer reservations" : "Track your reserved stock"}
             </p>
           </div>
@@ -81,8 +81,8 @@ export default function ReservationsPage() {
               className={clsx(
                 "px-4 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all capitalize",
                 tab === s
-                  ? "bg-amber-400 text-surface-900"
-                  : "bg-surface-800 text-surface-400 border border-surface-600 hover:text-white"
+                  ? "bg-amber-400 text-white"
+                  : "bg-slate-100 text-slate-500 border border-slate-200 hover:text-slate-700"
               )}
             >
               {s}
@@ -102,9 +102,9 @@ export default function ReservationsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <BookMarked size={36} className="text-surface-600 mb-3" />
-            <p className="text-surface-400">No reservations found</p>
-            <p className="text-surface-600 text-sm mt-1">
+            <BookMarked size={36} className="text-slate-300 mb-3" />
+            <p className="text-slate-400">No reservations found</p>
+            <p className="text-slate-400 text-sm mt-1">
               {tab === "all" ? "Reserve items from the inventory" : `No ${tab} reservations`}
             </p>
           </div>

@@ -13,7 +13,7 @@ import clsx from "clsx";
 const RES_STATUS_COLORS: Record<string, string> = {
   pending: "text-amber-400 bg-amber-400/10 border-amber-400/30",
   confirmed: "text-sky-400 bg-sky-400/10 border-sky-400/30",
-  cancelled: "text-surface-400 bg-surface-500/30 border-surface-400/30",
+  cancelled: "text-slate-400 bg-slate-100 border-slate-300",
   sold: "text-jade-400 bg-jade-400/10 border-jade-400/30",
 };
 
@@ -140,11 +140,11 @@ export default function ReservationCard({ reservation: r, onUpdated }: Reservati
     : new Date((r.createdAt as any)?.seconds * 1000 || Date.now());
 
   return (
-    <div className="bg-surface-800 border border-surface-600 rounded-xl p-5 space-y-4">
+    <div className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 shadow-sm">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="text-white font-semibold">{snap.model}</p>
-          <p className="text-surface-400 text-sm mt-0.5">{snap.storage} · {snap.color}</p>
+          <p className="text-navy-500 font-semibold">{snap.model}</p>
+          <p className="text-slate-400 text-sm mt-0.5">{snap.storage} · {snap.color}</p>
         </div>
         <Badge
           label={r.status.charAt(0).toUpperCase() + r.status.slice(1)}
@@ -153,40 +153,40 @@ export default function ReservationCard({ reservation: r, onUpdated }: Reservati
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <div className="bg-surface-700 rounded-lg px-3 py-2.5">
-          <p className="text-surface-400 text-[10px] uppercase tracking-wider mb-1">Grade</p>
+        <div className="bg-slate-50 rounded-lg px-3 py-2.5">
+          <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Grade</p>
           <Badge label={snap.grade} className={GRADE_COLORS[snap.grade]} />
         </div>
-        <div className="bg-surface-700 rounded-lg px-3 py-2.5">
-          <p className="text-surface-400 text-[10px] uppercase tracking-wider mb-1">Qty</p>
-          <p className="text-white font-mono font-medium">{r.quantity} pcs</p>
+        <div className="bg-slate-50 rounded-lg px-3 py-2.5">
+          <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Qty</p>
+          <p className="text-navy-500 font-mono font-medium">{r.quantity} pcs</p>
         </div>
-        <div className="bg-surface-700 rounded-lg px-3 py-2.5">
-          <p className="text-surface-400 text-[10px] uppercase tracking-wider mb-1">Unit</p>
-          <p className="text-amber-400 font-mono font-medium">{snap.buyerPrice.toLocaleString()} AED</p>
+        <div className="bg-slate-50 rounded-lg px-3 py-2.5">
+          <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Unit</p>
+          <p className="text-amber-500 font-mono font-medium">{snap.buyerPrice.toLocaleString()} AED</p>
         </div>
-        <div className="bg-surface-700 rounded-lg px-3 py-2.5">
-          <p className="text-surface-400 text-[10px] uppercase tracking-wider mb-1">Total</p>
-          <p className="text-amber-400 font-mono font-semibold">{r.totalPrice.toLocaleString()} AED</p>
+        <div className="bg-slate-50 rounded-lg px-3 py-2.5">
+          <p className="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Total</p>
+          <p className="text-amber-500 font-mono font-semibold">{r.totalPrice.toLocaleString()} AED</p>
         </div>
       </div>
 
       {isAdmin && (
-        <div className="flex items-center gap-2 text-sm text-surface-400">
+        <div className="flex items-center gap-2 text-sm text-slate-500">
           <Building2 size={13} />
           <span>{r.buyerCompany || r.buyerName}</span>
-          <span className="text-surface-600">·</span>
-          <span className="text-surface-500 text-xs">{r.buyerName}</span>
+          <span className="text-slate-300">·</span>
+          <span className="text-slate-400 text-xs">{r.buyerName}</span>
         </div>
       )}
 
-      <div className="flex items-center gap-1.5 text-xs text-surface-500">
+      <div className="flex items-center gap-1.5 text-xs text-slate-400">
         <Calendar size={11} />
         {date.toLocaleDateString("en-AE", {
           day: "numeric", month: "short", year: "numeric",
           hour: "2-digit", minute: "2-digit",
         })}
-        <span className="ml-auto font-mono text-surface-600">#{r.id.slice(0, 8)}</span>
+        <span className="ml-auto font-mono text-slate-300">#{r.id.slice(0, 8)}</span>
       </div>
 
       {/* Admin actions */}

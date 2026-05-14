@@ -5,7 +5,6 @@ import { Users, RefreshCw, ShieldCheck, ShieldOff, UserCheck, UserX, Phone } fro
 import AuthGuard from "@/components/layout/AuthGuard";
 import AppShell from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { getAllUsers, updateUserApproval, updateUserRole } from "@/lib/db";
 import { AppUser } from "@/types";
 import clsx from "clsx";
@@ -40,6 +39,7 @@ export default function UsersPage() {
   };
 
   const approved = users.filter((u) => u.approved).length;
+  const pending = users.filter((u) => !u.approved).length;
 
   return (
     <AuthGuard requireAdmin>
@@ -47,9 +47,9 @@ export default function UsersPage() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-white text-2xl font-semibold">Users</h1>
-              <p className="text-surface-400 text-sm mt-0.5">
-                {approved} of {users.length} accounts approved
+              <h1 className="text-navy-500 text-2xl font-semibold">Users</h1>
+              <p className="text-slate-400 text-sm mt-0.5">
+                {approved} approved · <span className="text-red-500 font-medium">{pending} pending</span>
               </p>
             </div>
             <Button variant="ghost" size="sm" onClick={load} disabled={loading}>
@@ -58,14 +58,24 @@ export default function UsersPage() {
             </Button>
           </div>
 
+          {/* Pending alert */}
+          {pending > 0 && (
+            <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+              <p className="text-amber-700 text-sm font-medium">
+                {pending} user{pending > 1 ? "s" : ""} waiting for approval
+              </p>
+            </div>
+          )}
+
           {loading ? (
             <div className="flex items-center justify-center py-24">
-              <div className="w-6 h-6 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-navy-500 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : users.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 text-center">
-              <Users size={36} className="text-surface-600 mb-3" />
-              <p className="text-surface-400">No users yet</p>
+              <Users size={36} className="text-slate-300 mb-3" />
+              <p className="text-slate-400">No users yet</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -73,47 +83,54 @@ export default function UsersPage() {
                 <div
                   key={u.uid}
                   className={clsx(
-                    "bg-surface-800 border rounded-xl p-4 transition-all",
-                    u.approved ? "border-surface-600" : "border-rose-500/20"
+                    "bg-white border-l-4 border rounded-xl p-4 transition-all shadow-sm",
+                    u.approved
+                      ? "border-l-emerald-400 border-slate-200"
+                      : "border-l-red-400 border-red-100 bg-red-50/30"
                   )}
                 >
                   <div className="flex items-center gap-4">
-                    {/* Avatar placeholder */}
-                    <div className="w-10 h-10 rounded-full bg-surface-600 flex items-center justify-center shrink-0">
-                      <span className="text-surface-300 font-medium text-sm">
-                        {(u.displayName || u.email).charAt(0).toUpperCase()}
-                      </span>
+                    {/* Avatar */}
+                    <div className={clsx(
+                      "w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-sm",
+                      u.approved ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"
+                    )}>
+                      {(u.displayName || u.email).charAt(0).toUpperCase()}
                     </div>
 
                     {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-white font-medium text-sm truncate">
+                        <p className="text-navy-500 font-semibold text-sm truncate">
                           {u.displayName}
                         </p>
-                        <Badge
-                          label={u.role}
-                          className={
-                            u.role === "admin"
-                              ? "text-amber-400 border-amber-400/30 bg-amber-400/10"
-                              : "text-sky-400 border-sky-400/30 bg-sky-400/10"
-                          }
-                        />
+                        <span className={clsx(
+                          "text-xs px-2 py-0.5 rounded-full font-medium border",
+                          u.role === "admin"
+                            ? "text-amber-700 border-amber-300 bg-amber-50"
+                            : "text-sky-700 border-sky-200 bg-sky-50"
+                        )}>
+                          {u.role}
+                        </span>
                         {!u.approved && (
-                          <Badge
-                            label="Pending"
-                            className="text-rose-400 border-rose-400/30 bg-rose-400/10"
-                          />
+                          <span className="text-xs px-2 py-0.5 rounded-full font-bold border text-red-600 border-red-300 bg-red-50">
+                            ⏳ Pending Approval
+                          </span>
+                        )}
+                        {u.approved && (
+                          <span className="text-xs px-2 py-0.5 rounded-full font-medium border text-emerald-600 border-emerald-200 bg-emerald-50">
+                            ✓ Approved
+                          </span>
                         )}
                       </div>
-                      <p className="text-surface-400 text-xs mt-0.5 truncate">
+                      <p className="text-slate-500 text-xs mt-0.5 truncate">
                         {u.email}
                         {u.companyName && (
-                          <span className="ml-2 text-surface-500">· {u.companyName}</span>
+                          <span className="ml-2 text-slate-400">· {u.companyName}</span>
                         )}
                       </p>
                       {u.phone && (
-                        <p className="text-surface-500 text-xs mt-0.5 flex items-center gap-1">
+                        <p className="text-slate-400 text-xs mt-0.5 flex items-center gap-1">
                           <Phone size={10} />
                           {u.phone}
                         </p>
